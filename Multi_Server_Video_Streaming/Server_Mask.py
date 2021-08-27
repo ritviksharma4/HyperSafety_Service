@@ -68,20 +68,21 @@ def comms_client():
         mask_detect = detectFace_Mask(frame)
         if (mask_detect == None):
             mask_detect = "No Face Detected"
-            Detect_Face_Mask_Output = []
-        else :
-            Detect_Face_Mask_Output.append(mask_detect)
+            # Detect_Face_Mask_Output = []
+
+        Detect_Face_Mask_Output.append(mask_detect)
         
         print("Mask Prediction :", mask_detect)
+        # print("Output :", Detect_Face_Mask_Output)
 
         print("Output Lists Size:", len(Detect_Face_Mask_Output))
         
         """
-            For every 50 predictions for the same person, 
+            For every 51 predictions for the same person, 
             we pick the most frequent prediction and send
             the result to the client.
         """
-        if (len(Detect_Face_Mask_Output) == 26):
+        if (len(Detect_Face_Mask_Output) == 51 or (mask_detect == "No Face Detected" and len(Detect_Face_Mask_Output) > 0)):
             final_mask_detection = most_probable_mask_prediction()
             print("Found Most Probable :", final_mask_detection)
 
@@ -99,10 +100,10 @@ def comms_client():
                 Detect_Face_Mask_Output = []
                 client_socket.send(encoded_msg_2_client)
             
-            # elif (final_mask_detection == "No Face Detected"):
-            #     msg_2_client = final_mask_detection
-            #     encoded_msg_2_client = msg_2_client.encode()
-            #     client_socket.send(encoded_msg_2_client)
+            elif (final_mask_detection == "No Face Detected"):
+                msg_2_client = "Still Processing..."
+                encoded_msg_2_client = msg_2_client.encode()
+                client_socket.send(encoded_msg_2_client)
             
             Detect_Face_Mask_Output = []
 
