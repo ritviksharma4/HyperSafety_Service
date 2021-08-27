@@ -5,14 +5,19 @@ import time
 import pickle
 import struct
 
+# Client communicates with mask detection server.
 
-def comms_server_mask(webcam):
+def comms_server_mask(webcam): 
 
     mask_client_socket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     mask_client_socket.connect(('localhost',8089))
 
     while True:
 
+        """ 
+            ret stores a bool value depending on the status of the webcam.
+            Frame stores each frame of the webcam
+        """
         ret, frame = webcam.read()
         if (ret == True):
             data = pickle.dumps(frame)
@@ -26,6 +31,8 @@ def comms_server_mask(webcam):
 
             # if (mask_server_reply == "0"):
             #     comms_server_face_rec()
+            
+# Client communicates with the face recog server if mask is not detected.
 
 def comms_server_face_rec():
 
@@ -46,6 +53,11 @@ def comms_server_face_rec():
 
 if __name__ == '__main__':
 
+    """ 
+        VideoCapture(0) turns on the webcam.
+        VideoCapture("your_video_path") to read a specific video.
+    """
+    
     webcam = cv2.VideoCapture(0)
 
     if (webcam.isOpened() == False):
