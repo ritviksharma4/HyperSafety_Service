@@ -7,14 +7,18 @@ from google_drive_downloader import GoogleDriveDownloader as gdd
 from tqdm import tqdm
 
 # download dataset from link provided by
-# https://github.com/X-zhangyang/Real-World-Masked-Face-Dataset
+# https://github.com/ThisIsTeddyBear/facedataset.git (TO BE MADE PUBLIC BEFORE USE)
 
+"""
+UNCOMMENT THESE IF USING ANOTHER DATASET
 datasetPath = Path('covid_mask_detector/data/mask.zip')
 gdd.download_file_from_google_drive(file_id='1UlOk6EtiaXTHylRUx2mySgvJX9ycoeBp',
                                     dest_path=str(datasetPath),
                                     unzip=True)
 # delete zip file
 datasetPath.unlink()
+
+"""
 
 datasetPath = Path('covid_mask_detector/data/self-built-masked-face-recognition-dataset')
 maskPath = datasetPath/'AFDB_masked_face_dataset'

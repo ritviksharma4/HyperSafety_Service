@@ -11,8 +11,11 @@ from torchvision.transforms import Compose, Resize, ToPILImage, ToTensor
 from .common.facedetector import FaceDetector
 from .train import MaskDetector
 
-modelpath_old = str(Path.home()) + "/github/Multi_Server_Video_Streaming/covid_mask_detector/tensorboard/mask-detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=98.95.ckpt"
-modelpath_new = str(Path.home()) + "/github/Multi_Server_Video_Streaming/covid_mask_detector/tensorboard/mask-detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=99.09.ckpt"
+# Models Trained
+modelpath_vivek = str(Path.home()) + "/github/Multi_Server_Video_Streaming/covid_mask_detector/tensorboard/mask-detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=98.95.ckpt"
+modelpath_old = str(Path.home()) + "/github/Multi_Server_Video_Streaming/covid_mask_detector/tensorboard/mask-detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=99.09.ckpt"
+modelpath_new = str(Path.home()) + "/github/Multi_Server_Video_Streaming/covid_mask_detector/tensorboard/mask-detector/version_1/checkpoints/epoch=8-val_loss=0.08-val_acc=98.91.ckpt"
+
 @torch.no_grad()
 
 def detectFace_Mask(frame):
