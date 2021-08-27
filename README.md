@@ -18,6 +18,14 @@ Run Client :
 python3 -m Multi_Server_Video_Streaming.Client
 
 
+
+
+
+
+
+
+
+
 FOR WINDOWS:
 
 Navigate to /users/xyz/github/Multi_Server_Video_Streaming/
