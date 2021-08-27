@@ -22,8 +22,10 @@ def comms_server_mask(webcam):
             mask_server_reply = mask_client_socket.recv(1024)
             mask_server_reply = mask_server_reply.decode()
 
-            if (mask_server_reply == "0"):
-                comms_server_face_rec()
+            print("Server Reply :", mask_server_reply)
+
+            # if (mask_server_reply == "0"):
+            #     comms_server_face_rec()
 
 def comms_server_face_rec():
 
