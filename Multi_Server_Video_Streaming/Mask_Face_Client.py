@@ -35,13 +35,10 @@ def comms_server_mask(webcam):
             mask_server_reply = mask_client_socket.recv(1024)
             mask_server_reply = mask_server_reply.decode()
 
-            # if (mask_server_reply == "Still Processing..."):
-            #     pass
-            # else :
-            print("Server Reply :", mask_server_reply)
-
-            # if (mask_server_reply == "0"):
-            #     mask_client_socket.close()
+            if (mask_server_reply == "Still Processing..."):
+                pass
+            else :
+                print("Server Reply :", mask_server_reply)
 
         else :
             print("Web-Cam could not be opened")

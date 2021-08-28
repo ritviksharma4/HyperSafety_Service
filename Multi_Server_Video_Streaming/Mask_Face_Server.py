@@ -2,13 +2,13 @@ import pickle
 import socket
 import struct
 from collections import Counter
-import cv2
 from covid_mask_detector.frame_face_rec import detectFace_Mask
-from Face_Recognition_Project.face_recognition.face_recognition_webcam_test import face_recognition_service
+from Face_Recognition_Project.face_recognition.Face_Recognition_By_Frames import face_recognition_service
 
 server_socket = None
 Frame_Mask_Detect_Pair = []
 Output_List = []
+client_socket = None
 
 def create_Output_List():
 
@@ -33,10 +33,15 @@ def create_server_socket():
     server_socket.bind((HOST, PORT))
     server_socket.listen(10)
 
+def send_result_to_client(msg_to_client):
+    
+    encoded_msg_to_client = msg_to_client.encode()
+    client_socket.send(encoded_msg_to_client)
+
 # Server communicates with client and accepts video frames
 def comms_client():
 
-    global Frame_Mask_Detect_Pair, server_socket
+    global Frame_Mask_Detect_Pair, server_socket, client_socket
 
     client_socket, addr = server_socket.accept()
 
@@ -66,12 +71,13 @@ def comms_client():
 
         # Pass the frame to the mask detection model to
         # check if the person is wearing a mask or not
+
         error_flag = 0
         try :
             mask_detect = detectFace_Mask(frame)
         except ValueError:
             error_flag = 1
-            mask_detect = "NOOOOOOOOOOOOOOOOOOOOOOOOOOO FACE DETECTEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+            mask_detect = "*** NO FACE DETECTED! ***"
 
         print("Mask_Detect :", mask_detect)
         if (error_flag == 1):
@@ -80,10 +86,6 @@ def comms_client():
 
         if (mask_detect == None):
             mask_detect = "No Face Detected"        
-        # elif (mask_detect == "No Mask"):
-        #     face_detect = face_recognition_service(frame)
-        #     print("Name :", face_detect)
-            # Frame_Mask_Detect_Pair = []
         
         Frame_Mask_Detect_Pair.append((mask_detect, frame))
         
@@ -103,34 +105,21 @@ def comms_client():
 
             if (final_mask_detection == "No Mask"):
                 face_recog_reply = face_recognition_service(Frame_Mask_Detect_Pair)
-                print("Face Recog Reply : ", face_recog_reply)
-                msg_2_client = final_mask_detection + "\nPerson Found : " + face_recog_reply
-                encoded_msg_2_client = msg_2_client.encode()
-                client_socket.send(encoded_msg_2_client)
-                Frame_Mask_Detect_Pair = []
-                # comms_client()
-                # client_socket.close()
-            
+                msg_to_client = final_mask_detection + "\nPerson Found : " + face_recog_reply         
+
             elif (final_mask_detection == "Mask"):
-                msg_2_client = "Wearing a Mask"
-                encoded_msg_2_client = msg_2_client.encode()
-                Frame_Mask_Detect_Pair = []
-                client_socket.send(encoded_msg_2_client)
+                msg_to_client = "Wearing a Mask"
+
 
             elif (final_mask_detection == "No Face Detected"):
-                msg_2_client = "Still Processing..."
-                encoded_msg_2_client = msg_2_client.encode()
-                Frame_Mask_Detect_Pair = []
-                client_socket.send(encoded_msg_2_client)
-            
+                msg_to_client = "Still Processing..."
             
             Frame_Mask_Detect_Pair = []
 
         else :
-            print("here")
-            msg_2_client = "Still Processing..."
-            encoded_msg_2_client = msg_2_client.encode()
-            client_socket.send(encoded_msg_2_client)
+            msg_to_client = "Still Processing..."
+            
+        send_result_to_client(msg_to_client)
 
 
 if __name__ == '__main__':
