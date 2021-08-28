@@ -1,10 +1,19 @@
 import pickle
 import socket
 import struct
-import random
+import cv2
+from collections import Counter
+from Face_Recognition_Project.face_recognition.face_recognition_webcam import face_recognition_service
 
 server_socket = None
-random_found = ["Person Found", "Person Not Found"]
+
+Detected_Faces_List = []
+
+def most_probable_mask_prediction():
+    print("Finding most Probable..")
+    global Detected_Faces_List
+    data = Counter(Detected_Faces_List)
+    return max(Detected_Faces_List, key=data.get)
 
 def create_server_socket():
     global server_socket
@@ -16,7 +25,7 @@ def create_server_socket():
 
 def comms_client():
 
-    global server_socket, random_found
+    global server_socket, Detected_Faces_List
 
     client_socket, addr = server_socket.accept()
 
@@ -41,13 +50,24 @@ def comms_client():
         data = data[msg_size:]
         frame = pickle.loads(frame_data)
 
-        index = random.randint(0,1)
-        msg_2_client = random_found[index]
-        print("Msg to client :", msg_2_client)
+        name_prediction_list = face_recognition_service(frame)
+        print("Server_Face_Recog Recieved :", name_prediction_list)
+        
+        for name in name_prediction_list:
+            Detected_Faces_List.append(name)
 
-        encoded_msg_2_client = msg_2_client.encode()
-        client_socket.send(encoded_msg_2_client)
-        comms_client()
+        if (len(Detected_Faces_List) > 0):
+
+            final_face_recog = most_probable_mask_prediction()
+            msg_2_client = final_face_recog
+
+            print("Msg to client :", msg_2_client)
+
+            encoded_msg_2_client = msg_2_client.encode()
+            client_socket.send(encoded_msg_2_client)
+            Detected_Faces_List = []
+
+            # comms_client()
 
         # msg_2_client = "Person Found"
 
