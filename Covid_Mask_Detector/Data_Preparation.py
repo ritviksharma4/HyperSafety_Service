@@ -25,6 +25,7 @@ maskPath = datasetPath/'AFDB_masked_face_dataset'
 nonMaskPath = datasetPath/'AFDB_face_dataset'
 maskDF = pd.DataFrame()
 
+# Label Mask images with 1 or True.
 for subject in tqdm(list(maskPath.iterdir()), desc='mask photos'):
     for imgPath in subject.iterdir():
         maskDF = maskDF.append({
@@ -32,6 +33,7 @@ for subject in tqdm(list(maskPath.iterdir()), desc='mask photos'):
             'mask': 1
         }, ignore_index=True)
 
+# Label No Mask images with 0 or False.
 for subject in tqdm(list(nonMaskPath.iterdir()), desc='non mask photos'):
     for imgPath in subject.iterdir():
         maskDF = maskDF.append({
@@ -40,5 +42,5 @@ for subject in tqdm(list(nonMaskPath.iterdir()), desc='non mask photos'):
         }, ignore_index=True)
 
 dfName = 'Covid_Mask_Detector/Data/mask_df.csv'
-print(f'saving Dataframe to: {dfName}')
+print(f'Saving Dataframe to: {dfName}')
 maskDF.to_csv(dfName)

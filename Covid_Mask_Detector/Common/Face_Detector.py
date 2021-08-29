@@ -6,15 +6,16 @@ import numpy as np
 from cv2 import resize
 from cv2.dnn import blobFromImage, readNetFromCaffe
 
-
+# Generic default exception.
 class FaceDetectorException(Exception):
-    """ generic default exception
-    """
+    pass
 
 
+# Face Detector Class.
 class FaceDetector:
-    """ Face Detector class
-    """
+
+
+    # Face Detector Initializations.
     def __init__(self, prototype: Path=None, model: Path=None,
                  confidenceThreshold: float=0.6):
         self.prototype = prototype
@@ -27,9 +28,10 @@ class FaceDetector:
             raise FaceDetectorException("must specify model '.caffemodel' file path")
         self.classifier = readNetFromCaffe(str(prototype), str(model))
     
+
+    # Detecting Faces in am Image.
     def detect(self, image):
-        """ detect faces in image
-        """
+        
         net = self.classifier
         height, width = image.shape[:2]
         blob = blobFromImage(resize(image, (300, 300)), 1.0,

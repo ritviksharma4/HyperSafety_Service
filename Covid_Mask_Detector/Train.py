@@ -1,5 +1,3 @@
-""" Training module
-"""
 from pathlib import Path
 from typing import Dict, List
 
@@ -21,10 +19,11 @@ from torch.utils.data import DataLoader
 from .Dataset import MaskDataset
 
 
-# pylint: disable=not-callable
+# Mask Detector PyTorch Lightning class.
 class MaskDetector(pl.LightningModule):
-    """ MaskDetector PyTorch Lightning class
-    """
+
+
+    # Initialise a 4 layer Convolutional Neural Network.
     def __init__(self, maskDFPath: Path=None):
         super(MaskDetector, self).__init__()
         self.maskDFPath = maskDFPath
@@ -62,15 +61,16 @@ class MaskDetector(pl.LightningModule):
             Linear(in_features=1024, out_features=2),
         )
         
-        # Initialize layers' weights
+        # Initialize layers' weights.
         for sequential in [convLayer1, convLayer2, convLayer3, linearLayers]:
             for layer in sequential.children():
                 if isinstance(layer, (Linear, Conv2d)):
                     init.xavier_uniform_(layer.weight)
-    
-    def forward(self, x: Tensor): # pylint: disable=arguments-differ
-        """ forward pass
-        """
+
+
+    # Feed Forward Function. 
+    def forward(self, x: Tensor):
+
         out = self.convLayer1(x)
         out = self.convLayer2(out)
         out = self.convLayer3(out)
@@ -85,9 +85,9 @@ class MaskDetector(pl.LightningModule):
         self.trainDF = MaskDataset(train)
         self.validateDF = MaskDataset(validate)
         
-        # Create weight vector for CrossEntropyLoss
-        maskNum = maskDF[maskDF['mask']==1].shape[0]
-        nonMaskNum = maskDF[maskDF['mask']==0].shape[0]
+        # Create weight vector for CrossEntropyLoss.
+        maskNum = maskDF[maskDF['mask'] == 1].shape[0]
+        nonMaskNum = maskDF[maskDF['mask'] == 0].shape[0]
         nSamples = [nonMaskNum, maskNum]
         normedWeights = [1 - (x / sum(nSamples)) for x in nSamples]
         self.crossEntropyLoss = CrossEntropyLoss(weight=torch.tensor(normedWeights))
@@ -101,7 +101,7 @@ class MaskDetector(pl.LightningModule):
     def configure_optimizers(self) -> Optimizer:
         return Adam(self.parameters(), lr=self.learningRate)
     
-    # pylint: disable=arguments-differ
+    # Define Training parameters.
     def training_step(self, batch: dict, _batch_idx: int) -> Tensor:
         inputs, labels = batch['image'], batch['mask']
         labels = labels.flatten()
@@ -133,6 +133,8 @@ class MaskDetector(pl.LightningModule):
         self.log('val_acc', valAcc, prog_bar=True)
 
 if __name__ == '__main__':
+
+    # Saving Trained Model in Tensorboard/Mask_Detector/version_x/ directory.
     model = MaskDetector(Path('Covid_Mask_Detector/Data/mask_df.csv'))
     logger = TensorBoardLogger("Covid_Mask_Detector/Tensorboard", name="Mask_Detector")
     checkpointCallback = ModelCheckpoint(

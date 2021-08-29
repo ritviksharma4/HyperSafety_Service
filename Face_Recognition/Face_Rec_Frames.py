@@ -38,17 +38,28 @@ known_face_names = [
     "Harsh Ambasta"
 ]
 
+# List of Detected Faces
 Detected_Faces = []
 
+
+# From Detected_Faces, we return the most frequent Name.
 def most_probable_face_recognition():
 
     global Detected_Faces
 
     data = Counter(Detected_Faces)
-    most_frequent_name = max(Detected_Faces, key=data.get)
+
+    try :
+        most_frequent_name = max(Detected_Faces, key=data.get)
+    except :
+        return "Encountered an Unexpected Error! Retrying...\n"
+
     Detected_Faces = []
     return most_frequent_name
 
+
+# Face Recognition Service, which accepts Frame_Mask_Detect_Pair.
+# Frame_Mask_Detect_Pair = [(mask_detect, frame)]
 def face_recognition_service(Frame_Mask_Detect_Pair):
 
     global Detected_Faces
@@ -56,31 +67,32 @@ def face_recognition_service(Frame_Mask_Detect_Pair):
     face_locations = []
     face_encodings = []
     process_this_frame = True
-    print("Frame Mask Detect Pair :", Frame_Mask_Detect_Pair)
 
-    for frame in Frame_Mask_Detect_Pair:
-        frame = frame[1]
-        # Grab a single frame of video
-        # ret, frame = video_capture.read()
+    for pair in Frame_Mask_Detect_Pair:
 
-        # Resize frame of video to 1/4 size for faster face recognition processing
+        # frame is on index 1 of each tuple.
+        frame = pair[1]
+
+        # Resize frame of video to 1/4 size for faster face recognition processing.
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses).
         rgb_small_frame = small_frame[:, :, ::-1]
 
-        # Only process every other frame of video to save time
-        if process_this_frame:
+        # Only process alternate frame of video to save time.
+        if (process_this_frame):
+
             # Find all the faces and face encodings in the current frame of video
             face_locations = face_recognition.face_locations(rgb_small_frame)
             face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
 
             for face_encoding in face_encodings:
+
                 # See if the face is a match for the known face(s)
                 matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
                 name = "Not an Employee"
 
-                # Or instead, use the known face with the smallest distance to the new face
+                # If no match found, use the known face with the smallest distance to the new face
                 face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
                 best_match_index = np.argmin(face_distances)
                 if matches[best_match_index]:
@@ -88,10 +100,10 @@ def face_recognition_service(Frame_Mask_Detect_Pair):
 
                 Detected_Faces.append(name)
 
+        # Make process_this_frame False for Alternate Frame
         process_this_frame = not process_this_frame
     
     return most_probable_face_recognition()
 
 if __name__ == '__main__':
-    
-    face_recognition_service(Frame_Mask_Detect_Pair = [])
+    pass

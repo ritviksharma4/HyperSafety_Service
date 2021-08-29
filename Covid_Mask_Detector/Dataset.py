@@ -1,5 +1,3 @@
-""" Dataset module
-"""
 import cv2
 import numpy as np
 from torch import long, tensor
@@ -7,18 +5,19 @@ from torch.utils.data.dataset import Dataset
 from torchvision.transforms import Compose, Resize, ToPILImage, ToTensor
 
 
+""" Masked faces dataset
+    0 = 'no mask'
+    1 = 'mask'
+"""
 class MaskDataset(Dataset):
-    """ Masked faces dataset
-        0 = 'no mask'
-        1 = 'mask'
-    """
+
     def __init__(self, dataFrame):
         self.dataFrame = dataFrame
         
         self.transformations = Compose([
             ToPILImage(),
             Resize((100, 100)),
-            ToTensor(), # [0, 1]
+            ToTensor(), 
         ])
     
     def __getitem__(self, key):
@@ -30,7 +29,7 @@ class MaskDataset(Dataset):
                              cv2.IMREAD_UNCHANGED)
         return {
             'image': self.transformations(image),
-            'mask': tensor([row['mask']], dtype=long), # pylint: disable=not-callable
+            'mask': tensor([row['mask']], dtype=long), 
         }
     
     def __len__(self):
