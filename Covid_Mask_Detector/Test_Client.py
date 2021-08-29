@@ -1,7 +1,5 @@
 import cv2
-import pickle
-import struct
-from .frame_face_rec import detectFace_Mask
+from .Frame_Face_Recognition import detectFace_Mask
 
 def sendFrames(webcam):
     while True:

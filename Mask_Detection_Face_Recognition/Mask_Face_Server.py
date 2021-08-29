@@ -2,8 +2,8 @@ import pickle
 import socket
 import struct
 from collections import Counter
-from covid_mask_detector.frame_face_rec import detectFace_Mask
-from Face_Recognition_Project.face_recognition.Face_Recognition_By_Frames import face_recognition_service
+from Covid_Mask_Detector.Frame_Face_Recognition import detect_face_mask
+from Face_Recognition.Face_Rec_Frames import face_recognition_service
 
 server_socket = None
 Frame_Mask_Detect_Pair = []
@@ -66,7 +66,6 @@ def comms_client():
         frame_data = data[:msg_size]
         data = data[msg_size:]
         
-        # Extract frame
         frame = pickle.loads(frame_data)
 
         # Pass the frame to the mask detection model to
@@ -74,12 +73,13 @@ def comms_client():
 
         error_flag = 0
         try :
-            mask_detect = detectFace_Mask(frame)
+            mask_detect = detect_face_mask(frame)
         except ValueError:
             error_flag = 1
             mask_detect = "*** NO FACE DETECTED! ***"
 
         print("Mask_Detect :", mask_detect)
+
         if (error_flag == 1):
             mask_detect = "No Face Detected"
             error_flag = 0

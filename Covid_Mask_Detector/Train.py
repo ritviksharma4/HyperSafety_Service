@@ -13,13 +13,12 @@ from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_lightning.metrics import Accuracy
 from sklearn.model_selection import train_test_split
 from torch import Tensor
-from torch.nn import (Conv2d, CrossEntropyLoss, Linear, MaxPool2d, ReLU,
-                      Sequential)
+from torch.nn import (Conv2d, CrossEntropyLoss, Linear, MaxPool2d, ReLU, Sequential)
 from torch.optim import Adam
 from torch.optim.optimizer import Optimizer
 from torch.utils.data import DataLoader
 
-from .dataset import MaskDataset
+from .Dataset import MaskDataset
 
 
 # pylint: disable=not-callable
@@ -134,8 +133,8 @@ class MaskDetector(pl.LightningModule):
         self.log('val_acc', valAcc, prog_bar=True)
 
 if __name__ == '__main__':
-    model = MaskDetector(Path('covid_mask_detector/data/mask_df.csv'))
-    logger = TensorBoardLogger("covid_mask_detector/tensorboard", name="mask-detector")
+    model = MaskDetector(Path('Covid_Mask_Detector/Data/mask_df.csv'))
+    logger = TensorBoardLogger("Covid_Mask_Detector/Tensorboard", name="Mask_Detector")
     checkpointCallback = ModelCheckpoint(
         filename='{epoch}-{val_loss:.2f}-{val_acc:.2f}',
         verbose=True,

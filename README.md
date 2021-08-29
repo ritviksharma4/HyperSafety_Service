@@ -1,44 +1,37 @@
 # Final_Year_Project
 
 
-FOR UBUNTU:
+FOR LINUX :
 
-Navigate to /home/xyz/github/Multi_Server_Video_Streaming/
 
-Run Mask Server :
+Navigate to /home/xyz/github/Mask_Detection_Face_Recognition_Service/
 
-python3 -m Multi_Server_Video_Streaming.Server_Mask
 
-Run Face Recog Server :
+Run Mask-Detection_Face-Recognition Server :
 
-python3 -m Multi_Server_Video_Streaming.Server_Face_Recog
-
-Run Client :
-
-python3 -m Multi_Server_Video_Streaming.Client
+python3 -m Mask_Detection_Face_Recognition_Service.Mask_Face_Server
 
 
 
+Run Mask-Detection_Face-Recognition Client :
 
-
-
+python3 -m Mask_Detection_Face_Recognition_Service.Mask_Face_Client
 
 
 
 
 FOR WINDOWS:
 
-Navigate to /users/xyz/github/Multi_Server_Video_Streaming/
 
-Run Mask Server :
-
-python -m Multi_Server_Video_Streaming.Server_Mask
-
-Run Face Recog Server :
-
-python -m Multi_Server_Video_Streaming.Server_Face_Recog
+Navigate to /users/xyz/github/Mask_Detection_Face_Recognition_Service/
 
 
-Run Client :
+Run Mask-Detection_Face-Recognition Server :
 
-python -m Multi_Server_Video_Streaming.Client
+python -m Mask_Detection_Face_Recognition_Service.Mask_Face_Server
+
+
+
+Run Mask-Detection_Face-Recognition Client :
+
+python -m Mask_Detection_Face_Recognition_Service.Mask_Face_Client

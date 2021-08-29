@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 """
 UNCOMMENT THESE IF USING ANOTHER DATASET
-datasetPath = Path('covid_mask_detector/data/mask.zip')
+datasetPath = Path('Covid_Mask_Detector/Data/mask.zip')
 gdd.download_file_from_google_drive(file_id='1UlOk6EtiaXTHylRUx2mySgvJX9ycoeBp',
                                     dest_path=str(datasetPath),
                                     unzip=True)
@@ -20,7 +20,7 @@ datasetPath.unlink()
 
 """
 
-datasetPath = Path('covid_mask_detector/data/self-built-masked-face-recognition-dataset')
+datasetPath = Path('Covid_Mask_Detector/Data/self-built-masked-face-recognition-dataset')
 maskPath = datasetPath/'AFDB_masked_face_dataset'
 nonMaskPath = datasetPath/'AFDB_face_dataset'
 maskDF = pd.DataFrame()
@@ -39,6 +39,6 @@ for subject in tqdm(list(nonMaskPath.iterdir()), desc='non mask photos'):
             'mask': 0
         }, ignore_index=True)
 
-dfName = 'covid_mask_detector/data/mask_df.csv'
+dfName = 'Covid_Mask_Detector/Data/mask_df.csv'
 print(f'saving Dataframe to: {dfName}')
 maskDF.to_csv(dfName)
