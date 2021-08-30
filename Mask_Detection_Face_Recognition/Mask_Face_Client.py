@@ -2,7 +2,6 @@ import cv2
 import socket
 import pickle
 import struct
-import threading
 
 
 # Creating a Client Socket.

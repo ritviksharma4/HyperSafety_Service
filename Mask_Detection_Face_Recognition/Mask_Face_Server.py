@@ -4,7 +4,10 @@ import struct
 import threading
 from collections import Counter
 from Covid_Mask_Detector.Frame_Face_Recognition import detect_face_mask
-from Face_Recognition.Face_Rec_Frames import face_recognition_service
+# from Face_Recognition.Face_Rec_Frames import face_recognition_service
+
+# For Testing Purposes
+from Face_Recognition.Face_Rec_Video import face_recognition_service
 
 
 """
@@ -13,8 +16,6 @@ from Face_Recognition.Face_Rec_Frames import face_recognition_service
     We create an Output_List which stores only mask_detect from Frame_Mask_Detect_Pair.
 """
 def create_mask_detect_Output_List(Frame_Mask_Detect_Pair):
-
-    # global Frame_Mask_Detect_Pair
 
     Output_List = []
     
@@ -56,18 +57,24 @@ def send_result_to_client(client_socket, msg_to_client):
     encoded_msg_to_client = msg_to_client.encode()
     client_socket.send(encoded_msg_to_client)
 
+def create_client_connection(server_socket):
+    client_socket, client_address = server_socket.accept()
+    thread_unq_client = threading.Thread(target = mask_detect_face_recog_server, 
+                                        args = (server_socket, client_socket, client_address))
+    thread_unq_client.start()
+    create_client_connection(server_socket)
+
 
 # Server communicates with Client and accepts camera frames.
-def mask_detect_face_recog_server(server_socket):
+def mask_detect_face_recog_server(server_socket, client_socket, client_address):
 
     Frame_Mask_Detect_Pair = []
-    client_socket, address = server_socket.accept()
 
     # Accepting Frames in batch size of 2^32 ("L").
     data = b''  
     payload_size = struct.calcsize("L")  
     
-    print("\nGot Connection from :", address)
+    print("\nGot Connection from :", client_address)
 
     while (True):
 
@@ -80,9 +87,9 @@ def mask_detect_face_recog_server(server_socket):
                 Server Ready for next Connection.
             """
             if (msg_frm_client == b"Closing Client"):
-                print("Client Disconnected :", address)
+                print("Client Disconnected :", client_address)
                 client_socket.close()
-                mask_detect_face_recog_server(server_socket)
+                return
 
             data += msg_frm_client
 
@@ -165,7 +172,8 @@ if __name__ == '__main__':
     try :
         server_socket = create_server_socket()
         print('Mask Detection - Face Recognition Server is Running...\n')
-        mask_detect_face_recog_server(server_socket)
+        # mask_detect_face_recog_server(server_socket)
+        create_client_connection(server_socket)
 
     # Shutting the Mask Detection - Face Recognition Server Down.
     except KeyboardInterrupt:
