@@ -38,23 +38,17 @@ known_face_names = [
     "Harsh Ambasta"
 ]
 
-# List of Detected Faces
-Detected_Faces = []
-
 
 # From Detected_Faces, we return the most frequent Name.
-def most_probable_face_recognition():
-
-    global Detected_Faces
+def most_probable_face_recognition(Detected_Faces):
 
     data = Counter(Detected_Faces)
-
+    
     try :
         most_frequent_name = max(Detected_Faces, key=data.get)
     except :
         return "Encountered an Unexpected Error! Retrying...\n"
 
-    Detected_Faces = []
     return most_frequent_name
 
 
@@ -62,8 +56,8 @@ def most_probable_face_recognition():
 # Frame_Mask_Detect_Pair = [(mask_detect, frame)]
 def face_recognition_service(Frame_Mask_Detect_Pair):
 
-    global Detected_Faces
-
+    # List of Detected Faces
+    Detected_Faces = []
     face_locations = []
     face_encodings = []
     process_this_frame = True
@@ -103,7 +97,7 @@ def face_recognition_service(Frame_Mask_Detect_Pair):
         # Make process_this_frame False for Alternate Frame
         process_this_frame = not process_this_frame
     
-    return most_probable_face_recognition()
+    return most_probable_face_recognition(Detected_Faces)
 
 if __name__ == '__main__':
     pass

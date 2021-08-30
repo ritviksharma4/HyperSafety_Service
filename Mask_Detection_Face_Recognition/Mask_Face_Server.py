@@ -1,15 +1,10 @@
 import pickle
 import socket
 import struct
+import threading
 from collections import Counter
 from Covid_Mask_Detector.Frame_Face_Recognition import detect_face_mask
 from Face_Recognition.Face_Rec_Frames import face_recognition_service
-
-server_socket = None
-client_socket = None
-
-Frame_Mask_Detect_Pair = []
-Output_List = []
 
 
 """
@@ -17,21 +12,22 @@ Output_List = []
     e.g ("Mask", frame).
     We create an Output_List which stores only mask_detect from Frame_Mask_Detect_Pair.
 """
-def create_mask_detect_Output_List():
+def create_mask_detect_Output_List(Frame_Mask_Detect_Pair):
 
-    global Frame_Mask_Detect_Pair, Output_List
+    # global Frame_Mask_Detect_Pair
+
+    Output_List = []
     
     for pair in Frame_Mask_Detect_Pair:
         Output_List.append(pair[0])
+    
+    return Output_List
 
 
 # From Output_List, we return the most frequent mask_detect.
-def most_probable_mask_detection():
+def most_probable_mask_detection(Frame_Mask_Detect_Pair):
 
-    create_mask_detect_Output_List()
-
-    global Output_List
-
+    Output_List = create_mask_detect_Output_List(Frame_Mask_Detect_Pair)
     data = Counter(Output_List)
 
     try :
@@ -39,14 +35,11 @@ def most_probable_mask_detection():
     except :
         return "Encountered an Unexpected Error! Retrying...\n"
 
-    Output_List = []
     return most_frequent_mask_detect
 
 
 # Creating a Server Socket.
 def create_server_socket():
-
-    global server_socket
 
     HOST = ''
     PORT = 7089
@@ -54,31 +47,44 @@ def create_server_socket():
     server_socket.bind((HOST, PORT))
     server_socket.listen(10)
 
+    return server_socket
+
 
 # Sending required message from Server to Client.
-def send_result_to_client(msg_to_client):
+def send_result_to_client(client_socket, msg_to_client):
     
     encoded_msg_to_client = msg_to_client.encode()
     client_socket.send(encoded_msg_to_client)
 
 
 # Server communicates with Client and accepts camera frames.
-def mask_detect_face_recog_server():
+def mask_detect_face_recog_server(server_socket):
 
-    global Frame_Mask_Detect_Pair, server_socket, client_socket
-
+    Frame_Mask_Detect_Pair = []
     client_socket, address = server_socket.accept()
 
     # Accepting Frames in batch size of 2^32 ("L").
     data = b''  
     payload_size = struct.calcsize("L")  
     
-    print("Got Connection from :", address)
+    print("\nGot Connection from :", address)
 
     while (True):
 
         while (len(data) < payload_size):
-            data += client_socket.recv(4096)
+            msg_frm_client = client_socket.recv(4096)
+
+            """
+                In Case Client experiences some errors and has to restart or
+                Client turns off the system, we disconnect the Client and make the 
+                Server Ready for next Connection.
+            """
+            if (msg_frm_client == b"Closing Client"):
+                print("Client Disconnected :", address)
+                client_socket.close()
+                mask_detect_face_recog_server(server_socket)
+
+            data += msg_frm_client
 
         packed_msg_size = data[:payload_size]
         data = data[payload_size:]
@@ -123,16 +129,17 @@ def mask_detect_face_recog_server():
             we make a final prediction based on how many predictions were already 
             made for him.
         """
-        if (len(Frame_Mask_Detect_Pair) == 25 or (mask_detect == "No Face Detected" and len(Frame_Mask_Detect_Pair) > 0)):
+        if (len(Frame_Mask_Detect_Pair) == 25 or (mask_detect == "No Face Detected" 
+                                                and len(Frame_Mask_Detect_Pair) > 0)):
 
-            final_mask_detection = most_probable_mask_detection()
+            final_mask_detection = most_probable_mask_detection(Frame_Mask_Detect_Pair)
             print("Most Probable Mask Detection :", final_mask_detection)
 
             # If person is found without a mask, then we send the same set of
             # frames for Face Recognition. 
             if (final_mask_detection == "No Mask"):
                 face_recog_reply = face_recognition_service(Frame_Mask_Detect_Pair)
-                msg_to_client = final_mask_detection + "\nPerson Found : " + face_recog_reply         
+                msg_to_client = "Person Found Without Mask : " + face_recog_reply         
 
             
             elif (final_mask_detection == "Mask"):
@@ -149,16 +156,16 @@ def mask_detect_face_recog_server():
             msg_to_client = "Still Processing..."
             
         # Prediction / Required Message is then sent to the Client.
-        send_result_to_client(msg_to_client)
+        send_result_to_client(client_socket, msg_to_client)
 
 
 if __name__ == '__main__':
 
     # Launching the Mask Detection - Face Recognition Server.
     try :
-        create_server_socket()
+        server_socket = create_server_socket()
         print('Mask Detection - Face Recognition Server is Running...\n')
-        mask_detect_face_recog_server()
+        mask_detect_face_recog_server(server_socket)
 
     # Shutting the Mask Detection - Face Recognition Server Down.
     except KeyboardInterrupt:

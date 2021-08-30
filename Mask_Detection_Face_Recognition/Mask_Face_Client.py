@@ -2,22 +2,20 @@ import cv2
 import socket
 import pickle
 import struct
+import threading
 
-mask_client_socket = None
 
 # Creating a Client Socket.
 def create_client_socket():
 
-    global mask_client_socket
-
-    mask_client_socket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    mask_client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     mask_client_socket.connect(('localhost',7089))
+
+    return mask_client_socket
 
 
 # Client communicates with Mask-Detection_Face-Recognition server.
-def mask_detect_face_recog_client(camera): 
-
-    global mask_client_socket
+def mask_detect_face_recog_client(mask_client_socket, camera): 
     
     while (True):
 
@@ -42,7 +40,9 @@ def mask_detect_face_recog_client(camera):
             # Discarding this message on client side as server is still processing.
             if (mask_server_reply == "Still Processing..."):
                 pass
-            else :
+            elif (mask_server_reply == "Person Found Without Mask : Encountered an Unexpected Error! Retrying...") :
+                print("Error Encountered : RETRYING!")
+            else :    
                 print("Server Reply :", mask_server_reply)
 
         else :
@@ -59,12 +59,14 @@ if __name__ == '__main__':
     # Launching Client with camera switched ON.
     try : 
         
-        create_client_socket()
+        mask_client_socket = create_client_socket()
         camera = cv2.VideoCapture(0)
-        mask_detect_face_recog_client(camera)
+        mask_detect_face_recog_client(mask_client_socket, camera)
 
     # Shutting the Client Down.
     except KeyboardInterrupt:
 
         print("\nClosing Client...\n")
+        close_request = "Closing Client"
+        mask_client_socket.send(close_request.encode())
         mask_client_socket.close()
