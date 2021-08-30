@@ -8,7 +8,12 @@ import struct
 def create_client_socket():
 
     mask_client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+    # If server is running on localhost or Same Machine
     mask_client_socket.connect(('localhost',7089))
+
+    # Uncomment line #16 and Comment line #13 if server is running on a different PC.
+    # mask_client_socket.connect(('your_laptop_ip',7089))
 
     return mask_client_socket
 

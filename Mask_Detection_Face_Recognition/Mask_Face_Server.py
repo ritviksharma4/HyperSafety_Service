@@ -4,10 +4,7 @@ import struct
 import threading
 from collections import Counter
 from Covid_Mask_Detector.Frame_Face_Recognition import detect_face_mask
-# from Face_Recognition.Face_Rec_Frames import face_recognition_service
-
-# For Testing Purposes
-from Face_Recognition.Face_Rec_Video import face_recognition_service
+from Face_Recognition.Face_Rec_Frames import face_recognition_service
 
 
 """
@@ -86,7 +83,7 @@ def mask_detect_face_recog_server(server_socket, client_socket, client_address):
                 Client turns off the system, we disconnect the Client and make the 
                 Server Ready for next Connection.
             """
-            if (msg_frm_client == b"Closing Client"):
+            if (msg_frm_client == b'Closing Client'):
                 print("Client Disconnected :", client_address)
                 client_socket.close()
                 return
@@ -126,7 +123,7 @@ def mask_detect_face_recog_server(server_socket, client_socket, client_address):
         # their frame in case we need to use Face Recognition.
         Frame_Mask_Detect_Pair.append((mask_detect, frame))
         
-        print("Mask Prediction :", mask_detect)
+        print("Mask Prediction :", mask_detect, " address :", client_address)
 
         
         """
@@ -140,7 +137,7 @@ def mask_detect_face_recog_server(server_socket, client_socket, client_address):
                                                 and len(Frame_Mask_Detect_Pair) > 0)):
 
             final_mask_detection = most_probable_mask_detection(Frame_Mask_Detect_Pair)
-            print("Most Probable Mask Detection :", final_mask_detection)
+            print("Most Probable Mask Detection :", final_mask_detection, " address :", client_address)
 
             # If person is found without a mask, then we send the same set of
             # frames for Face Recognition. 
