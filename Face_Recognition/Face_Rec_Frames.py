@@ -17,7 +17,11 @@ def add_employee_to_encodings(employee_name):
 
     global known_face_encodings, known_face_names, name_face_encoding_dict
     
-    employee_image = face_recognition.load_image_file(str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Face_Recognition/Employee_Images/" + employee_name + ".jpg")
+    employee_image = face_recognition.load_image_file(str(Path.home()) + 
+                                                    "/github/Mask_Detection_Face_Recognition_Service/" + 
+                                                    "Face_Recognition/Employee_Images/" + 
+                                                    employee_name + ".jpg")
+
     employee_face_encoding = face_recognition.face_encodings(employee_image)[0]
 
     known_face_encodings.append(employee_face_encoding)
@@ -26,7 +30,7 @@ def add_employee_to_encodings(employee_name):
     name_face_encoding_dict[employee_name] = employee_face_encoding.tolist()
     
     # Update the JSON File with the new employee's data.
-    name_face_encoding_file = open("name_face_encoding.txt", "w")
+    name_face_encoding_file = open("Face_Recognition/Name_Face_Encodings/name_face_encoding.txt", "w")
     name_face_encoding_file.write(json.dumps(name_face_encoding_dict))
     name_face_encoding_file.close()
 
@@ -39,7 +43,7 @@ def initialise_database():
 
     global known_face_encodings, known_face_names
 
-    name_face_encoding_file = open("name_face_encoding.txt", "r")
+    name_face_encoding_file = open("Face_Recognition/Name_Face_Encodings/name_face_encoding.txt", "r")
     name_face_encoding_json = name_face_encoding_file.read()
     name_face_encoding_dict = json.loads(name_face_encoding_json)
 

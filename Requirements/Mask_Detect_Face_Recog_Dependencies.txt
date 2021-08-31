@@ -1,0 +1,57 @@
+List of Dependencies :
+
+Install Torch 
+
+	pip3 install torch torchvision torchaudio
+	
+Install skvideo
+
+	|- pip3 install sk-video
+	
+Install sklearn
+
+	|- pip3 install -U scikit-learn
+	
+Install pandas
+
+	|- pip3 install pandas
+	
+Install opencv
+
+	|- pip3 install opencv-python
+	
+Install pytorch-lightning
+
+	|- pip3 install pytorch_lightning==1.2.10
+	
+Install ffmpeg
+
+	|- sudo apt install ffmpeg
+	
+
+Dependencies for Face Recognition :
+
+Install Cmake
+
+	|- sudo apt install cmake
+
+Open CV install
+
+	|- pip3 install opencv-python
+
+Install dlib
+
+	Navigate to /github directory.
+
+	|- git clone https://github.com/davisking/dlib.git
+	|- cd dlib
+	|- mkdir build
+	|- cd build
+	|- cmake ..
+	|- sudo cmake --build .
+	|- cd ..
+	|- python3 setup.py install
+
+Install face recognition
+
+	|- pip3 install face_recognition
