@@ -2,7 +2,7 @@ List of Dependencies :
 
 Install Torch 
 
-	pip3 install torch torchvision torchaudio
+	|- pip3 install torch torchvision torchaudio
 	
 Install skvideo
 
