@@ -4,7 +4,7 @@ import struct
 import threading
 from collections import Counter
 from Covid_Mask_Detector.Frame_Face_Recognition import detect_face_mask
-from Face_Recognition.Face_Rec_Frames import face_recognition_service
+from Face_Recognition.Face_Rec_Frames import face_recognition_service, initialise_database
 
 
 """
@@ -54,6 +54,9 @@ def send_result_to_client(client_socket, msg_to_client):
     encoded_msg_to_client = msg_to_client.encode()
     client_socket.send(encoded_msg_to_client)
 
+
+# For Parallel and Independent Execution of Unique Client requests,
+# Each Client is assigned a Unique Thread.
 def create_client_connection(server_socket):
     client_socket, client_address = server_socket.accept()
     thread_unq_client = threading.Thread(target = mask_detect_face_recog_server, 
@@ -115,7 +118,7 @@ def mask_detect_face_recog_server(server_socket, client_socket, client_address):
             mask_detect = "No Face Detected"
             error_flag = 0
 
-        # Model Predicts None if no face detected
+        # Model Predicts None if No Face was Detected.
         if (mask_detect == None):
             mask_detect = "No Face Detected" 
         
@@ -167,12 +170,18 @@ if __name__ == '__main__':
 
     # Launching the Mask Detection - Face Recognition Server.
     try :
+
+        # Upon Server restart, initialise existing employees' data.
+        initialise_database()
+        print("Database Initialized.")
+
         server_socket = create_server_socket()
-        print('Mask Detection - Face Recognition Server is Running...\n')
-        # mask_detect_face_recog_server(server_socket)
+        print("Mask Detection - Face Recognition Server is Up and Running...\n")
+
         create_client_connection(server_socket)
 
     # Shutting the Mask Detection - Face Recognition Server Down.
     except KeyboardInterrupt:
+
         server_socket.close()
         print("\n\nMask Detection - Face Recognition Server has Shutdown.\n")

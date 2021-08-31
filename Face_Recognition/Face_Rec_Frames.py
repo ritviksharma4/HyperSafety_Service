@@ -3,40 +3,52 @@ import cv2
 import numpy as np
 from collections import Counter
 from pathlib import Path
+import json
 
-# Loading Employee's Images For Face Recognition Model to Recognize
+known_face_encodings = []
+known_face_names = []
+name_face_encoding_dict = {}
 
-ritvik_image = face_recognition.load_image_file(str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Face_Recognition/Employee_Images/Ritvik Sharma.jpg")
-ritvik_face_encoding = face_recognition.face_encodings(ritvik_image)[0]
+"""
+    For adding new employee, save the file in Employee_Images in form of
+    your_client_name.jpg, e.g. Vivek Nichani.jpg.
+"""
+def add_employee_to_encodings(employee_name):
 
-akul_image = face_recognition.load_image_file(str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Face_Recognition/Employee_Images/Akul Jain.jpg")
-akul_face_encoding = face_recognition.face_encodings(akul_image)[0]
+    global known_face_encodings, known_face_names, name_face_encoding_dict
+    
+    employee_image = face_recognition.load_image_file(str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Face_Recognition/Employee_Images/" + employee_name + ".jpg")
+    employee_face_encoding = face_recognition.face_encodings(employee_image)[0]
 
-steve_image = face_recognition.load_image_file(str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Face_Recognition/Employee_Images/Steve Aby.jpg")
-steve_face_encoding = face_recognition.face_encodings(steve_image)[0]
+    known_face_encodings.append(employee_face_encoding)
+    known_face_names.append(employee_name)
 
-vivek_image = face_recognition.load_image_file(str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Face_Recognition/Employee_Images/Vivek Nichani.jpg")
-vivek_face_encoding = face_recognition.face_encodings(vivek_image)[0]
+    name_face_encoding_dict[employee_name] = employee_face_encoding.tolist()
+    
+    # Update the JSON File with the new employee's data.
+    name_face_encoding_file = open("name_face_encoding.txt", "w")
+    name_face_encoding_file.write(json.dumps(name_face_encoding_dict))
+    name_face_encoding_file.close()
 
-harsh_image = face_recognition.load_image_file(str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Face_Recognition/Employee_Images/Harsh Ambasta.jpg")
-harsh_face_encoding = face_recognition.face_encodings(harsh_image)[0]
+"""
+    Upon Server restart, initialise existing employees' data.
+    We save all employees' data in JSON format in a .txt file.
+    Now, we extract them.
+"""
+def initialise_database():
 
-# Create arrays of known face encodings and their names
-known_face_encodings = [
-    ritvik_face_encoding,
-    akul_face_encoding,
-    steve_face_encoding,
-    vivek_face_encoding,
-    harsh_face_encoding
-]
+    global known_face_encodings, known_face_names
 
-known_face_names = [
-    "Ritvik Sharma",
-    "Akul Jain",
-    "Steve Aby",
-    "Vivek Nichani",
-    "Harsh Ambasta"
-]
+    name_face_encoding_file = open("name_face_encoding.txt", "r")
+    name_face_encoding_json = name_face_encoding_file.read()
+    name_face_encoding_dict = json.loads(name_face_encoding_json)
+
+    known_face_encodings = list(name_face_encoding_dict.values())
+    known_face_names = list(name_face_encoding_dict.keys())
+
+    # name_list = ["Akul Jain", "Harsh Ambasta", "Ritvik Sharma", "Steve Aby", "Vivek Nichani"]
+    # for name in name_list:
+    #     add_employee_to_encodings(name)
 
 
 # From Detected_Faces, we return the most frequent Name.
@@ -98,6 +110,7 @@ def face_recognition_service(Frame_Mask_Detect_Pair):
         process_this_frame = not process_this_frame
     
     return most_probable_face_recognition(Detected_Faces)
+
 
 if __name__ == '__main__':
     pass
