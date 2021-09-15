@@ -11,13 +11,13 @@ Navigate to /home/xyz/github/HyperSafety_Service/
 
 Run HyperSafety Server :
 
-    |- python3 -m HyperSafety.HyperSafety_Server
+    python3 -m HyperSafety.HyperSafety_Server
 
 
 
 Run HyperSafety Client :
 
-    |- python3 -m HyperSafety.HyperSafety_Client
+    python3 -m HyperSafety.HyperSafety_Client
 
 
 
@@ -32,9 +32,9 @@ Navigate to /users/xyz/github/HyperSafety_Service/
 
 Run HyperSafety Server :
 
-    |- python -m HyperSafety.HyperSafety_Server
+    python -m HyperSafety.HyperSafety_Server
 
 
 Run HyperSafety Client :
 
-    |- python -m HyperSafety.HyperSafety_Client
+    python -m HyperSafety.HyperSafety_Client
