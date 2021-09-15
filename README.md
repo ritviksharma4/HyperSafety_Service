@@ -1,22 +1,23 @@
-# Final_Year_Project
+# HyperSafety
+## Mask-Detection & Face-Recognition Service for Safety in Work Places.
 
-<img src = "Documentation_Images/MaskDetector_FaceRecognition.png" >
+<img src = "Documentation_Images/HyperSafety.png" >
 
 FOR LINUX :
 
 
-Navigate to /home/xyz/github/Mask_Detection_Face_Recognition_Service/
+Navigate to /home/xyz/github/HyperSafety_Service/
 
 
-Run Mask-Detection_Face-Recognition Server :
+Run HyperSafety Server :
 
-    |- python3 -m Mask_Detection_Face_Recognition.Mask_Face_Server
+    |- python3 -m HyperSafety.HyperSafety_Server
 
 
 
-Run Mask-Detection_Face-Recognition Client :
+Run HyperSafety Client :
 
-    |- python3 -m Mask_Detection_Face_Recognition.Mask_Face_Client
+    |- python3 -m HyperSafety.HyperSafety_Client
 
 
 
@@ -26,15 +27,14 @@ FOR WINDOWS:
 WARNING : WINDOWS DOESN'T SUPPORT WEBCAM USAGE! ONLY .mp4 FILES WORK!
 
 
-Navigate to /users/xyz/github/Mask_Detection_Face_Recognition_Service/
+Navigate to /users/xyz/github/HyperSafety_Service/
 
 
-Run Mask-Detection_Face-Recognition Server :
+Run HyperSafety Server :
 
-    |- python -m Mask_Detection_Face_Recognition.Mask_Face_Server
+    |- python -m HyperSafety.HyperSafety_Server
 
 
+Run HyperSafety Client :
 
-Run Mask-Detection_Face-Recognition Client :
-
-    |- python -m Mask_Detection_Face_Recognition.Mask_Face_Client
+    |- python -m HyperSafety.HyperSafety_Client

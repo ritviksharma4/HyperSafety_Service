@@ -176,7 +176,7 @@ if __name__ == '__main__':
         print("Database Initialized.")
 
         server_socket = create_server_socket()
-        print("Mask Detection - Face Recognition Server is Up and Running...\n")
+        print("HyperSafety Server is Up and Running...\n")
 
         create_client_connection(server_socket)
 
@@ -184,4 +184,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
 
         server_socket.close()
-        print("\n\nMask Detection - Face Recognition Server has Shutdown.\n")
+        print("\n\nHyperSafety Server has Shutdown.\n")

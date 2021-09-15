@@ -50,7 +50,7 @@ Install dlib
 	|- cmake ..
 	|- sudo cmake --build .
 	|- cd ..
-	|- sudo python3 setup.py install
+	|- python3 setup.py install
 
 Install face recognition
 

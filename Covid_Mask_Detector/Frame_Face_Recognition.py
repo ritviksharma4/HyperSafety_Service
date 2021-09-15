@@ -9,9 +9,9 @@ from .Common.Face_Detector import FaceDetector
 from .Train import MaskDetector
 
 # Various Trained Models
-modelpath_vivek = str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=98.95.ckpt"
-modelpath_old = str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=99.09.ckpt"
-modelpath_new = str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Covid_Mask_Detector/Tensorboard/Mask_Detector/version_1/checkpoints/epoch=8-val_loss=0.08-val_acc=98.91.ckpt"
+modelpath_vivek = str(Path.home()) + "/github/HyperSafety_Service/Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=98.95.ckpt"
+modelpath_old = str(Path.home()) + "/github/HyperSafety_Service/Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=99.09.ckpt"
+modelpath_new = str(Path.home()) + "/github/HyperSafety_Service/Covid_Mask_Detector/Tensorboard/Mask_Detector/version_1/checkpoints/epoch=8-val_loss=0.08-val_acc=98.91.ckpt"
 
 @torch.no_grad()
 

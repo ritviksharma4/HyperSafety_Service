@@ -18,7 +18,7 @@ def add_employee_to_encodings(employee_name):
     global known_face_encodings, known_face_names, name_face_encoding_dict
     
     employee_image = face_recognition.load_image_file(str(Path.home()) + 
-                                                    "/github/Mask_Detection_Face_Recognition_Service/" + 
+                                                    "/github/HyperSafety_Service/" + 
                                                     "Face_Recognition/Employee_Images/" + 
                                                     employee_name + ".jpg")
 

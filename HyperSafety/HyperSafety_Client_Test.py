@@ -60,7 +60,7 @@ if __name__ == '__main__':
     try : 
         
         mask_client_socket = create_client_socket()
-        video_path = str(Path.home()) + "/github/Mask_Detection_Face_Recognition_Service/Test_Videos/Ritvik Sharma.mp4"
+        video_path = str(Path.home()) + "/github/HyperSafety_Service/Test_Videos/Ritvik Sharma.mp4"
         video = cv2.VideoCapture(video_path)
         mask_detect_face_recog_client(mask_client_socket, video)
 
