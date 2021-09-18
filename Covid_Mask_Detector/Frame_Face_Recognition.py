@@ -1,6 +1,5 @@
 """ Detect people wearing masks in videos
 """
-from pathlib import Path
 import torch
 from skvideo.io import FFmpegWriter, vreader
 from torchvision.transforms import Compose, Resize, ToPILImage, ToTensor
@@ -9,9 +8,9 @@ from .Common.Face_Detector import FaceDetector
 from .Train import MaskDetector
 
 # Various Trained Models
-modelpath_vivek = str(Path.home()) + "/github/HyperSafety_Service/Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=98.95.ckpt"
-modelpath_old = str(Path.home()) + "/github/HyperSafety_Service/Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=99.09.ckpt"
-modelpath_new = str(Path.home()) + "/github/HyperSafety_Service/Covid_Mask_Detector/Tensorboard/Mask_Detector/version_1/checkpoints/epoch=8-val_loss=0.08-val_acc=98.91.ckpt"
+modelpath_v1 = "Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=98.95.ckpt"
+modelpath_v2 = "Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=99.09.ckpt"
+modelpath_v3 = "Covid_Mask_Detector/Tensorboard/Mask_Detector/version_1/checkpoints/epoch=8-val_loss=0.08-val_acc=98.91.ckpt"
 
 @torch.no_grad()
 
@@ -21,7 +20,7 @@ def detect_face_mask(frame):
 
     # Use GPU for processing if Available. Else use CPU.
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model.load_state_dict(torch.load(modelpath_new, map_location=device)['state_dict'], strict=False)
+    model.load_state_dict(torch.load(modelpath_v3, map_location=device)['state_dict'], strict=False)
 
     model = model.to(device)
     model.eval()

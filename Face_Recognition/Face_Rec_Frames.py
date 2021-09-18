@@ -2,7 +2,6 @@ import face_recognition
 import cv2
 import numpy as np
 from collections import Counter
-from pathlib import Path
 import json
 import urllib.request
 import os
@@ -79,7 +78,7 @@ def delete_image(file_path):
     We save all employees' data in JSON format in a .txt file.
     Now, we extract them.
 """
-def initialise_database():
+def update_database():
 
     global known_face_encodings, known_face_ids, name_face_encoding_dict
     

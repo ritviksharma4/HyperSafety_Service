@@ -4,7 +4,7 @@ import struct
 import threading
 from collections import Counter
 from Covid_Mask_Detector.Frame_Face_Recognition import detect_face_mask
-from Face_Recognition.Face_Rec_Frames import face_recognition_service, initialise_database
+from Face_Recognition.Face_Rec_Frames import face_recognition_service, update_database
 from .HyperSafety_NodeJS_Event import connectNodejs, sio
 
 
@@ -175,8 +175,8 @@ if __name__ == '__main__':
     try :
 
         # Upon Server restart, initialise existing employees' data.
-        initialise_database()
-        print("Database Initialized.")
+        update_database()
+        print("Database Ready.")
 
         server_socket = create_server_socket()
         print("HyperSafety Server is Up and Running...\n")
