@@ -27,7 +27,8 @@ def imgURL_to_img(employee_id, imageURL):
 
 """
     For adding new employee, save the file in Employee_Images in form of
-    your_client_name.jpg, e.g. Vivek Nichani.jpg.
+    your_client_id.jpg, e.g. RA006.jpg and store the encodings and then 
+    delete the file.
 """
 def add_employee_to_encodings(employee_id, file_path):
 
@@ -41,20 +42,22 @@ def add_employee_to_encodings(employee_id, file_path):
     known_face_ids.append(employee_id)
 
     name_face_encoding_dict[employee_id] = employee_face_encoding.tolist()
-    print(known_face_ids, name_face_encoding_dict)
 
     delete_image(file_path)
     update_name_face_encodings()
+
+"""
+    Find the employee from the list and then remove his ID and then
+    remove the encodings from the list.
+"""
 
 def del_employee_from_encodings(employee_id):
 
     global known_face_encodings, known_face_ids, name_face_encoding_dict
     employee_index = known_face_ids.index(employee_id)
-    print(known_face_ids, name_face_encoding_dict)
     known_face_ids.pop(employee_index)
     known_face_encodings.pop(employee_index)
     name_face_encoding_dict.pop(employee_id)
-    print(known_face_ids, name_face_encoding_dict)
     update_name_face_encodings()
 
 def update_name_face_encodings():
@@ -86,7 +89,6 @@ def initialise_database():
         name_face_encoding_dict = json.loads(name_face_encoding_json)
         known_face_encodings = list(name_face_encoding_dict.values())
         known_face_ids = list(name_face_encoding_dict.keys())
-    print(name_face_encoding_dict)
 
 # From Detected_Faces, we return the most frequent Name.
 def most_probable_face_recognition(Detected_Faces):
