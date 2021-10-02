@@ -108,7 +108,6 @@ def face_recognition_service(Frame_Mask_Detect_Pair):
 
     try:
         global known_face_encodings, known_face_ids
-        print(known_face_ids, known_face_encodings)
         # List of Detected Faces
         Detected_Faces = []
         face_locations = []

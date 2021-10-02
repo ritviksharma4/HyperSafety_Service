@@ -127,7 +127,7 @@ def mask_detect_face_recog_server(server_socket, client_socket, client_address):
         # their frame in case we need to use Face Recognition.
         Frame_Mask_Detect_Pair.append((mask_detect, frame))
         
-        print("Mask Prediction :", mask_detect, " address :", client_address)
+        # print("Mask Prediction :", mask_detect, " address :", client_address)
 
         
         """
@@ -149,7 +149,7 @@ def mask_detect_face_recog_server(server_socket, client_socket, client_address):
                 face_recog_reply = face_recognition_service(Frame_Mask_Detect_Pair)
                 if (face_recog_reply != "Not an Employee"):
                     sio.emit("Update Warnings.", face_recog_reply)
-                msg_to_client = "Person Found Without Mask : " + face_recog_reply         
+                msg_to_client = "Person Found Without Mask : " + face_recog_reply
 
             
             elif (final_mask_detection == "Mask"):
@@ -166,7 +166,10 @@ def mask_detect_face_recog_server(server_socket, client_socket, client_address):
             msg_to_client = "Still Processing..."
             
         # Prediction / Required Message is then sent to the Client.
+        if (msg_to_client != "Still Processing..."):
+            print(msg_to_client)         
         send_result_to_client(client_socket, msg_to_client)
+
 
 
 if __name__ == '__main__':

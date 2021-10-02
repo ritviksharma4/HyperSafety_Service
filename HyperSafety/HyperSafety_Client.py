@@ -30,6 +30,8 @@ def mask_detect_face_recog_client(mask_client_socket, camera):
         is_webcam_open, frame = camera.read()
         if (is_webcam_open):
 
+            cv2.imshow("Your Webcam Feed", frame)
+            cv2.waitKey(1)
             # Data is Serialized for ease of re-construction of frames in server side.
             data = pickle.dumps(frame)
 

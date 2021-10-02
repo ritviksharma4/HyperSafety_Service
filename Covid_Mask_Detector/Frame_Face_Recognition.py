@@ -12,7 +12,7 @@ modelpath_v1 = "Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoi
 modelpath_v2 = "Covid_Mask_Detector/Tensorboard/Mask_Detector/version_0/checkpoints/epoch=8-val_loss=0.08-val_acc=99.09.ckpt"
 modelpath_v3 = "Covid_Mask_Detector/Tensorboard/Mask_Detector/version_1/checkpoints/epoch=8-val_loss=0.08-val_acc=98.91.ckpt"
 
-@torch.no_grad()
+# @torch.no_grad()
 
 def detect_face_mask(frame):
 

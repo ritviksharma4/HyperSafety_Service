@@ -82,7 +82,7 @@ Then, clone the Git Repository.
 
 ## Run HyperSafety Server :
 
-    python3 -m HyperSafety.HyperSafety_Server
+     python3 -W ignore -m HyperSafety.HyperSafety_Server
 
 ## Run HyperSafety Client :
 
